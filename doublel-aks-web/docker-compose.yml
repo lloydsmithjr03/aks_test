@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  doublel-aks-web:
+    image: ${DOCKER_REGISTRY-}doublelaksweb
+    build:
+      context: .
+      dockerfile: doublel-aks-web/Dockerfile
