@@ -22,7 +22,7 @@ steps:
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
- - task: Docker@1
+- task: Docker@1
   displayName: Container registry login
   inputs:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
