@@ -34,7 +34,7 @@ steps:
     command: build
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistry)
-    dockerFile: ./doublel-aks-web/doublel-aks-web/Dockerfile
+    dockerFile: ./doublel-aks-web/Dockerfile
     imageName: $(Build.Repository.Name)
 - task: Docker@1
   displayName: Tag image
