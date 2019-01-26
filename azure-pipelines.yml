@@ -11,6 +11,8 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  azureSubscriptionEndpoint: Visual Studio Enterprise – MPN
+  azureContainerRegistry: doublel.azurecr.io
 
 steps:
 - script: dotnet build ./doublel-aks-web/doublel-aks-web.sln --configuration $(buildConfiguration)
@@ -20,9 +22,38 @@ steps:
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
-- script: docker build -t $(dockerId).azurecr.io/$(imageName) ./doublel-aks-web
-  displayName: 'docker build'
-- script: |
-    docker login -u $(dockerId) -p $(pswd) $(dockerId).azurecr.io
-    docker push $(dockerId).azurecr.io/$(imageName)
-  displayName: 'docker push'
+ - task: Docker@1
+  displayName: Container registry login
+  inputs:
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+    command: login
+- task: Docker@1
+  displayName: Build image
+  inputs:
+    command: build
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+    dockerFile: Dockerfile
+    imageName: $(Build.Repository.Name)
+- task: Docker@1
+  displayName: Tag image
+  inputs:
+    command: tag
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+    imageName: $(azureContainerRegistry)/$(Build.Repository.Name):latest
+    arguments: $(azureContainerRegistry)/$(Build.Repository.Name):$(Build.BuildId)
+- task: Docker@1
+  displayName: Push image
+  inputs:
+    command: push
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
+    imageName: $(Build.Repository.Name):$(Build.BuildId)
+- task: Docker@1
+  displayName: Container registry logout
+  inputs:
+    command: logout
+    azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    azureContainerRegistry: $(azureContainerRegistry)
