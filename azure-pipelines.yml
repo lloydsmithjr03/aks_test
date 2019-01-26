@@ -51,6 +51,7 @@ steps:
     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
     azureContainerRegistry: $(azureContainerRegistry)
     imageName: $(Build.Repository.Name):$(Build.BuildId)
+    condition: 'and(succeeded(), eq(variables["Build.SourceBranch"], "master"))'
 - task: Docker@1
   displayName: Container registry logout
   inputs:

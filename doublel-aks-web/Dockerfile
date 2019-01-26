@@ -4,7 +4,7 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
-COPY doublel-aks-web/doublel-aks-web.csproj doublel-aks-web/
+COPY ./doublel-aks-web/doublel-aks-web.csproj doublel-aks-web/
 RUN dotnet restore doublel-aks-web/doublel-aks-web.csproj
 COPY . .
 WORKDIR /src/doublel-aks-web
