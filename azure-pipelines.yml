@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  azureSubscriptionEndpoint: Visual Studio Enterprise – MPN
+  azureSubscriptionEndpoint: 'Visual Studio Enterprise – MPN'
   azureContainerRegistry: doublel.azurecr.io
 
 steps:
