@@ -20,7 +20,9 @@ steps:
     command: test
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+- script: docker build -t $(dockerId).azurecr.io/$(imageName) ./doublel-aks-web
+  displayName: 'docker build'
 - script: |
-    docker build -t $(dockerId).azurecr.io/$(imageName) ./doublel-aks-web
     docker login -u $(dockerId) -p $(pswd) $(dockerId).azurecr.io
     docker push $(dockerId).azurecr.io/$(imageName)
+  displayName: 'docker push'
